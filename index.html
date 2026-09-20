@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Professional Portfolio — Template</title>
+<link rel="stylesheet" href="style.css">
+<!--
+  :root{
+    --ink:#0d0d0d;
+    --paper:#ffffff;
+    --line:#0d0d0d;
+    --line-soft:rgba(255,255,255,.35);
+    --line-soft-dark:rgba(13,13,13,.25);
+    --gray-text:#4a4a4a;
+    --gray-text-light:#c9c9c9;
+    --stripe-light: rgba(13,13,13,.05);
+    --stripe-dark: rgba(255,255,255,.06);
+    --font-display: 'Archivo Black', 'Arial Black', sans-serif;
+    --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;background:#1b1b1b;font-family:var(--font-body);}
+
+  @font-face{
+    font-family:'Archivo Black';
+    src:local('Archivo Black');
+  }
+
+  /* ---------- Deck shell ---------- */
+  .deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .stage{
+    position:relative;
+    width:1280px;
+    height:720px;
+    transform-origin:center center;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+  }
+
+  .slide{
+    position:absolute;
+    inset:0;
+    display:none;
+    background:var(--paper);
+    color:var(--ink);
+    overflow:hidden;
+  }
+  .slide.active{display:block;}
+
+  .slide.dark{ background:var(--ink); color:#fff; }
+
+  /* diagonal stripe texture */
+  .stripes{
+    position:absolute; inset:0;
+    background-image:repeating-linear-gradient(
+      -55deg,
+      var(--stripe-light) 0px,
+      var(--stripe-light) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+    -webkit-mask-image: radial-gradient(circle at 8% 15%, black 0%, transparent 45%),
+                         radial-gradient(circle at 96% 88%, black 0%, transparent 45%);
+    mask-image: radial-gradient(circle at 8% 15%, black 0%, transparent 45%),
+                radial-gradient(circle at 96% 88%, black 0%, transparent 45%);
+    pointer-events:none;
+  }
+  .slide.dark .stripes{
+    background-image:repeating-linear-gradient(
+      -55deg,
+      var(--stripe-dark) 0px,
+      var(--stripe-dark) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+  }
+
+  .pad{ position:relative; height:100%; padding:56px 72px; z-index:2; }
+
+  /* ---------- Pills / badges ---------- */
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid currentColor;
+    border-radius:999px;
+    padding:11px 22px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.01em;
+    background:transparent;
+  }
+  .pill.quiet{ font-weight:500; }
+  .pill-row{ display:flex; gap:14px; flex-wrap:wrap; }
+
+  .star{ width:14px; height:14px; flex-shrink:0; }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:14px; font-weight:700;
+  }
+
+  /* ---------- Type ---------- */
+  h1.display{
+    font-family:var(--font-display);
+    font-weight:900;
+    line-height:.92;
+    letter-spacing:-.01em;
+    margin:0;
+  }
+  .display-xl{ font-size:104px; }
+  .display-lg{ font-size:64px; }
+
+  p.body-copy{
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    color:var(--gray-text);
+    max-width:520px;
+    margin:20px 0 0;
+  }
+  .slide.dark p.body-copy{ color:#d7d7d7; }
+
+  .kicker{ font-size:16px; font-weight:800; letter-spacing:.02em; margin-bottom:6px; }
+
+  /* ---------- Slide 1 / 10 : cover & closing ---------- */
+  .cover .pad{ display:flex; flex-direction:column; justify-content:space-between; }
+  .cover .badge-wrap{ display:flex; }
+  .cover .badge-pill{
+    border:1.5px solid var(--ink); border-radius:999px;
+    padding:16px 30px; font-weight:700; font-size:14px;
+    display:inline-flex; align-items:center; gap:10px;
+    align-self:stretch; justify-content:center; width:100%;
+  }
+  .cover-mid{ text-align:center; margin-top:10px; }
+  .cover-mid h1{ font-size:118px; }
+  .cover-mid .subtitle{
+    margin-top:18px;
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:.5em;
+    padding-left:.5em;
+  }
+  .cover .contact-row{
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  .contact-pill{
+    border:1.5px solid var(--ink); border-radius:999px;
+    padding:14px 26px; font-size:15px; flex:1 1 0; text-align:center; min-width:150px;
+  }
+  .slide.dark .contact-pill, .slide.dark .badge-pill{ border-color:#fff; }
+
+  /* ---------- Two column split layouts ---------- */
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    height:100%;
+  }
+  .split .col{ position:relative; padding:56px 64px; display:flex; flex-direction:column; }
+  .split .col.dark-col{ background:var(--ink); color:#fff; }
+  .split .col.light-col{ background:var(--paper); color:var(--ink); }
+
+  .media-frame{
+    width:100%; border-radius:2px; overflow:hidden; background:#222;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .media-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ph-photo{
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    color:#8d8d8d; font-size:13px; letter-spacing:.05em;
+    background:
+      linear-gradient(135deg, #3a3a3a 0%, #1c1c1c 45%, #4c4c4c 100%);
+  }
+  .ph-photo.light{ background:linear-gradient(135deg,#e9e9e9,#cfcfcf 55%,#f2f2f2); color:#7a7a7a; }
+
+  /* ---------- Beginning slide ---------- */
+  .slide-begin .split .col.dark-col{ justify-content:space-between; }
+  .slide-begin .content-top{ margin-top:64px; }
+  .slide-begin .media-frame{ position:absolute; right:64px; top:64px; bottom:64px; width:calc(50% - 100px); }
+
+  /* generic content stack helper */
+  .content-stack{ display:flex; flex-direction:column; gap:18px; margin-top:auto; margin-bottom:0; }
+  .content-stack.top{ margin-top:0; margin-bottom:auto; }
+
+  /* ---------- Intro / Hi I'm slide ---------- */
+  .intro .split .col.dark-col{ justify-content:flex-start; }
+  .intro .split .col.dark-col .media-frame{ width:100%; height:420px; margin-top:28px; }
+  .intro .split .col.light-col{ justify-content:center; }
+  .intro h1.display{ font-size:58px; }
+  .intro .handle-pill{ align-self:flex-start; margin-top:28px; }
+
+  /* ---------- Studies slide ---------- */
+  .studies .pad{ display:flex; flex-direction:column; }
+  .studies .banner{ width:100%; height:200px; margin-top:26px; border-radius:2px; overflow:hidden; }
+  .studies .lower{ display:grid; grid-template-columns:1.1fr 1fr; gap:60px; margin-top:38px; flex:1; }
+  .studies h1.display{ font-size:64px; }
+  .timeline{ display:flex; flex-direction:column; gap:26px; }
+  .timeline-item{ border-top:1px solid #d8d8d8; padding-top:14px; }
+  .timeline-item:first-child{ border-top:none; padding-top:0; }
+  .timeline-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .timeline-head .school{ font-weight:800; font-size:17px; }
+  .timeline-head .years{ font-size:13px; color:#6b6b6b; white-space:nowrap; }
+  .timeline-item p{ margin:6px 0 0; font-size:14px; color:#6b6b6b; line-height:1.5; }
+
+  /* ---------- Capabilities slide ---------- */
+  .capabilities .pad{ display:flex; flex-direction:column; }
+  .capabilities .top-row{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .capabilities h1.display{ font-size:64px; margin-top:36px; }
+  .cap-grid{ display:grid; grid-template-columns:1fr 1fr; gap:36px 60px; margin-top:52px; max-width:900px; }
+  .cap-item .rule{ width:6px; height:6px; border-radius:50%; background:#fff; display:inline-block; margin-right:10px; }
+  .cap-item h3{ font-size:18px; margin:0 0 8px; }
+  .cap-item p{ margin:0; font-size:14.5px; color:#c9c9c9; line-height:1.55; max-width:400px; }
+
+  /* ---------- Career slide ---------- */
+  .career .split .col.dark-col{ justify-content:space-between; }
+  .career .split .col.light-col{ justify-content:center; gap:34px; }
+  .career-item .rule{ width:6px; height:6px; border-radius:50%; background:#0d0d0d; display:inline-block; margin-right:10px; }
+  .career-item h3{ font-size:17px; margin:0 0 6px; }
+  .career-item p{ margin:0; font-size:14px; color:#5a5a5a; line-height:1.5; max-width:380px; }
+
+  /* ---------- Showcase bento box ---------- */
+  .showcase .pad { display: flex; flex-direction: column; height: 100%; position: relative; z-index: 2; }
+  .showcase .top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .showcase .showcase-title-row { margin-bottom: 32px; }
+  .showcase h1.display { font-size: 72px; margin: 0; line-height: 1; }
+  
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+    min-height: 0;
+  }
+  .bento-item {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background: #1a1a1a;
+  }
+  .bento-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bento-item:hover img {
+    transform: scale(1.05);
+  }
+  .bento-grid .m1 { grid-column: 1 / 2; grid-row: 1 / 3; }
+  .bento-grid .m2 { grid-column: 2 / 3; grid-row: 1 / 2; }
+  .bento-grid .m3 { grid-column: 3 / 4; grid-row: 1 / 2; }
+  .bento-grid .m4 { grid-column: 2 / 3; grid-row: 2 / 3; }
+  .bento-grid .m5 { grid-column: 3 / 4; grid-row: 2 / 3; }
+
+  /* ---------- Creative Project ---------- */
+  .creative .split .col.dark-col{ justify-content:space-between; }
+  .creative .split .col.dark-col .below-media{ display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:24px; }
+  .creative .below-media h3{ font-size:15px; margin:0 0 8px; }
+  .creative .below-media p{ font-size:13.5px; color:#c9c9c9; line-height:1.5; margin:0; }
+  .creative .split .col.dark-col .media-frame{ height:300px; }
+
+  /* ---------- Next project ---------- */
+  .nextproj .split .col.light-col{ justify-content:space-between; }
+  .nextproj .split .col.dark-col{ position:relative; }
+  .nextproj .split-media{
+    position:absolute; left:-60px; top:64px; bottom:64px; width:280px; z-index:3;
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+  }
+  .nextproj .col.dark-col{ padding-left:260px; justify-content:center; gap:30px; }
+
+  /* ---------- Footer meta line (used on several slides) ---------- */
+  .footer-meta{
+    position:absolute; bottom:32px; left:64px; right:64px;
+    display:flex; justify-content:space-between; font-size:12px; color:#9a9a9a;
+  }
+
+  /* ---------- Nav controls ---------- */
+  .nav{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:18px;
+    background:rgba(20,20,20,.72);
+    backdrop-filter:blur(6px);
+    padding:10px 18px; border-radius:999px;
+    z-index:50;
+    font-family:var(--font-body);
+  }
+  .nav button{
+    background:none; border:1px solid rgba(255,255,255,.4); color:#fff;
+    width:34px; height:34px; border-radius:50%;
+    cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease;
+  }
+  .nav button:hover{ background:rgba(255,255,255,.15); }
+  .nav .dots{ display:flex; gap:7px; }
+  .nav .dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:background .15s ease, transform .15s ease; }
+  .nav .dot.active{ background:#fff; transform:scale(1.3); }
+  .nav .count{ color:#fff; font-size:12px; min-width:44px; text-align:center; letter-spacing:.03em; }
+
+  @media (max-width: 900px){
+    .nav{ transform:translateX(-50%) scale(.85); bottom:8px; }
+  }
+-->
+</head>
+<body>
+
+<div class="deck">
+  <div class="stage" id="stage">
+
+    <!-- SLIDE 1 : Cover -->
+    <section class="slide active cover">
+      <div class="pad">
+        <div class="badge-wrap">
+          <div class="badge-pill">★ My Journey</div>
+        </div>
+        <div class="cover-mid">
+          <h1 class="display display-xl">Saloni Rajput</h1>
+          <div class="subtitle">GENERATIVE AI / AI-ML ENGINEER</div>
+        </div>
+        <div class="contact-row">
+          <a class="contact-pill" style="font-weight:700;" href="https://www.linkedin.com/in/saloni-rajput429/" target="_blank" rel="noopener noreferrer">(26) Saloni Rajput | LinkedIn</a>
+          <a class="contact-pill" href="https://github.com/Salonivatsa" target="_blank" rel="noopener noreferrer">Salonivatsa (Saloni)</a>
+          <a class="contact-pill" href="tel:7060860429">7060860429</a>
+          <a class="contact-pill" href="mailto:salonirajout0429@gmail.com">salonirajout0429@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 : The Beginning -->
+    <section class="slide dark slide-begin" style="background-image:linear-gradient(90deg, rgba(13,13,13,.95) 0%, rgba(13,13,13,.72) 42%, rgba(13,13,13,.3) 100%), url('ChatGPT%20Image%20Sep%2020,%202026,%2011_48_42%20AM.png'); background-size:cover; background-position:center;">
+      <div class="stripes"></div>
+      <div class="split">
+        <div class="col dark-col" style="background:transparent;">
+          <div class="eyebrow">3rd Year B.Tech | Information Technology</div>
+          <div class="content-stack">
+            <h1 class="display display-lg">The<br>Beginning</h1>
+            <p class="body-copy">B.Tech Information Technology student at Rajkiya Engineering College, Azamgarh, building my journey in AI and Generative AI through hands-on projects, continuous learning, and problem solving.</p>
+            <div class="pill" style="align-self:flex-start;">Saloni Rajput</div>
+          </div>
+        </div>
+        <div class="col dark-col" style="padding:0; background:transparent;"></div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 : Hi, I'm  -->
+    <section class="slide intro">
+      <div class="split">
+        <div class="col dark-col">
+          <div class="eyebrow">★ My Creative Journey</div>
+          <div class="media-frame">
+            <img src="WhatsApp%20Image%202026-09-20%20at%2012.07.04%20PM.jpeg" alt="Saloni Rajput">
+          </div>
+        </div>
+        <div class="col light-col">
+          <h1 class="display">Hi, I'm<br>Saloni<br>Rajput</h1>
+          <p class="body-copy">Generative AI enthusiast and B.Tech Information Technology student, passionate about building practical AI solutions using Machine Learning, Deep Learning and Generative AI. I enjoy learning new technologies and turning ideas into real-world projects.</p>
+          <div class="pill handle-pill">@saloni-rajput429</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 : My Studies -->
+    <section class="slide studies">
+      <div class="stripes"></div>
+      <div class="pad">
+        <div class="studies-left">
+          <div class="eyebrow">★ My Creative Journey</div>
+          <h1 class="display">My Studies</h1>
+          <p class="body-copy" style="max-width:460px;">My academic journey has built a strong foundation in technology, problem-solving, and creative thinking. Each stage has helped me develop new skills and prepare for a career in AI and technology.</p>
+          <div class="pill" style="margin-top:32px; align-self: flex-start;">Saloni Rajput</div>
+        </div>
+        
+        <div class="studies-right">
+          <div class="study-card-wrapper">
+            <div class="study-card">
+              <span class="years">2024 – 2028</span>
+              <h2 class="school">Rajkiya Engineering College, Azamgarh</h2>
+              <p>Building skills in programming, DSA, Machine Learning, Deep Learning and Generative AI.</p>
+            </div>
+          </div>
+          <div class="study-card-wrapper">
+            <div class="study-card">
+              <span class="years">Class 12 – Science</span>
+              <h2 class="school">St. Mary School</h2>
+              <p>Completed higher secondary education with a focus on mathematics and science.</p>
+            </div>
+          </div>
+          <div class="study-card-wrapper">
+            <div class="study-card">
+              <span class="years">Class 10</span>
+              <h2 class="school">School Education</h2>
+              <p>Developed strong fundamentals in academics, logical thinking and problem-solving.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 : Personal Capabilities -->
+    <section class="slide dark capabilities">
+      <div class="stripes"></div>
+      <div class="pad">
+        <div class="top-row">
+          <div class="eyebrow">★ My Creative Journey</div>
+          <div class="pill">Saloni Rajput</div>
+        </div>
+        <h1 class="display">Personal<br>Capabilities</h1>
+        <div class="cap-grid">
+          <div class="cap-item"><h3><span class="rule"></span>Problem Solving</h3><p>Breaking complex problems into simple, practical solutions.</p></div>
+          <div class="cap-item"><h3><span class="rule"></span>Communication Skills</h3><p>Expressing ideas clearly and working effectively with others.</p></div>
+          <div class="cap-item"><h3><span class="rule"></span>Teamwork &amp; Collaboration</h3><p>Contributing to team projects and learning from different perspectives.</p></div>
+          <div class="cap-item"><h3><span class="rule"></span>Time Management</h3><p>Balancing academics, coding practice, projects, and continuous learning.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 : Career Experience -->
+    <section class="slide career">
+      <div class="split">
+        <div class="col dark-col">
+          <div class="eyebrow">★ My Creative Journey</div>
+          <h1 class="display display-lg">Career<br>Experience</h1>
+          <div class="pill" style="align-self:flex-start;">Saloni Rajput</div>
+        </div>
+        <div class="col light-col">
+          <div class="career-item">
+            <img class="career-photo" src="https://media.licdn.com/dms/image/v2/D5622AQGBzVwTx9X_9w/feedshare-shrink_1280/B56Z7KgymGKsAQ-/0/1781514054280?e=1791417600&v=beta&t=Elku0Qlyt3IYEP_vY0bH0f_zXSp9Uor1E2rWI4i5fUU" alt="Deloitte virtual internship">
+            <div class="career-item-content">
+              <h3><span class="rule"></span>Deloitte – Virtual Internship</h3>
+              <p>Worked on data analysis and visualization tasks using Tableau.</p>
+            </div>
+          </div>
+          <div class="career-item">
+            <img class="career-photo" src="Screenshot%20(142).png" alt="Tata data visualisation experience">
+            <div class="career-item-content">
+              <h3><span class="rule"></span>Tata – Data Visualisation</h3>
+              <p>Completed practical tasks focused on data analysis and business insights.</p>
+            </div>
+          </div>
+          <div class="career-item">
+            <img class="career-photo" src="WhatsApp%20Image%202026-03-22%20at%2010.12.32%20AM.jpeg" alt="AI Hack Matrix team project">
+            <div class="career-item-content">
+              <h3><span class="rule"></span>AI Hack Matrix – Team Member</h3>
+              <p>Participated in an AI/ML hackathon and worked on a real-world problem with a team.</p>
+            </div>
+          </div>
+          <div class="career-item">
+            <img class="career-photo" src="Screenshot%20(156).png" alt="Generative AI projects">
+            <div class="career-item-content">
+              <h3><span class="rule"></span>Generative AI Projects</h3>
+              <p>Built projects using Machine Learning, Deep Learning, LLMs, LangChain and RAG.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 : Project Showcase -->
+    <section class="slide dark showcase">
+      <div class="stripes"></div>
+      <div class="pad">
+        <div class="top-bar">
+          <div class="eyebrow">★ My Creative Journey</div>
+          <div class="pill">Saloni Rajput</div>
+        </div>
+        <div class="title-wrapper">
+          <h1 class="display">Project Showcase</h1>
+        </div>
+        <div class="showcase-gallery">
+          <div class="gallery-item"><img src="Screenshot%20(144).png" alt="AI project screenshot 144"></div>
+          <div class="gallery-item"><img src="Screenshot%20(148).png" alt="AI project screenshot 148"></div>
+          <div class="gallery-item"><img src="Screenshot%20(150).png" alt="AI project screenshot 150"></div>
+          <div class="gallery-item"><img src="Screenshot%20(156).png" alt="AI project screenshot 156"></div>
+          <div class="gallery-item"><img src="Screenshot%20(169).png" alt="AI project screenshot 169"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 : Creative Project -->
+    <section class="slide dark creative">
+      <div class="stripes"></div>
+      <div class="split">
+        <div class="col dark-col">
+          <div class="eyebrow">★ Sahayak AI</div>
+          <div class="content-stack">
+            <h1 class="display display-lg">Building<br>Intelligent<br>Solutions</h1>
+            <p class="body-copy">A collection of my practical projects in <strong>Artificial Intelligence, Machine Learning and Generative AI</strong>, focused on solving real-world problems through technology.</p>
+            <div class="pill" style="align-self:flex-start;">Saloni Rajput</div>
+          </div>
+        </div>
+        <div class="col dark-col" style="justify-content:center;">
+          <div class="media-frame sahayak-image">
+            <img src="sahayak.jpeg" alt="Sahayak AI project preview">
+            <div class="project-tag">Sahayak AI</div>
+          </div>
+          <div class="below-media">
+            <div><h3>Project Overview</h3><p>Real-world AI projects built while learning and experimenting with ML, Deep Learning and Generative AI.</p></div>
+            <div><h3>Design Concept</h3><p>From data preprocessing and model training to AI-powered applications, each project focuses on turning ideas into working solutions.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9 : Thanks -->
+    <section class="slide cover closing-slide">
+      <div class="pad">
+        <div class="badge-wrap">
+          <div class="badge-pill">★ My Creative Journey</div>
+        </div>
+        <div class="cover-mid">
+          <h1 class="display" style="font-size:80px; line-height:1;">Thanks for<br>Your Attention</h1>
+        </div>
+        <div class="contact-row">
+          <a class="contact-pill" style="font-weight:700;" href="#">Saloni Rajput</a>
+          <a class="contact-pill" href="mailto:salonirajput0429@gmail.com">salonirajput0429@gmail.com</a>
+          <a class="contact-pill" href="https://www.linkedin.com/in/salonirajput" target="_blank">LinkedIn</a>
+          <a class="contact-pill" href="tel:7060860429">7060860429</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button id="prevBtn" aria-label="Previous slide">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count">1 / 10</span>
+  <button id="nextBtn" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
